@@ -21,13 +21,13 @@ namespace BankTransferApp
 						InsertAccount();
 						break;
 					case "3":
-						//Transferir();
+						Transfer();
 						break;
 					case "4":
-						//Sacar();
+						WithDraw();
 						break;
 					case "5":
-						//Depositar();
+						Deposit();
 						break;
 					case "C":
 						Console.Clear();
@@ -43,6 +43,42 @@ namespace BankTransferApp
 			Console.WriteLine("Obrigado por utilizar nossos serviços.");
 			Console.ReadLine();
 
+		}
+
+        private static void Transfer()
+        {
+			Console.Write("Digite o número da conta de origem: ");
+			int indiceContaOrigem = int.Parse(Console.ReadLine());
+
+			Console.Write("Digite o número da conta de destino: ");
+			int indiceContaDestino = int.Parse(Console.ReadLine());
+
+			Console.Write("Digite o valor a ser transferido: ");
+			double valorTransferencia = double.Parse(Console.ReadLine());
+
+			accounts[indiceContaOrigem].Transfer(valorTransferencia, accounts[indiceContaDestino]);
+		}
+
+        private static void Deposit()
+        {
+			Console.Write("Digite o número da conta: ");
+			int indiceConta = int.Parse(Console.ReadLine());
+
+			Console.Write("Digite o valor a ser depositado: ");
+			double valorDeposito = double.Parse(Console.ReadLine());
+
+			accounts[indiceConta].Deposit(valorDeposito);
+		}
+
+        private static void WithDraw()
+        {
+			Console.Write("Digite o número da conta: ");
+			int indiceConta = int.Parse(Console.ReadLine());
+
+			Console.Write("Digite o valor a ser sacado: ");
+			double valorSaque = double.Parse(Console.ReadLine());
+
+			accounts[indiceConta].Withdraw(valorSaque);
 		}
 
         private static void ListAccounts()
