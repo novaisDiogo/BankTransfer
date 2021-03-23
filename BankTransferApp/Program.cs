@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BankTransferApp
 {
     class Program
     {
         static List<Account> accounts = new List<Account>();
+        static List<Transaction> transactions = new List<Transaction>();
         static void Main(string[] args)
         {
             string opcaoUsuario = GetUserOption();
@@ -32,7 +34,9 @@ namespace BankTransferApp
                     case "C":
                         Console.Clear();
                         break;
-
+                    case "E":
+                        Statement();
+                        break;
                     default:
                         Console.WriteLine("A opção digitada não existe! insira as opções listadas!");
                         break;
@@ -44,6 +48,42 @@ namespace BankTransferApp
             Console.WriteLine("Obrigado por utilizar nossos serviços.");
             Console.ReadLine();
 
+        }
+
+        private static void Statement()
+        {
+            try
+            {
+                Console.WriteLine("Digite o numero da conta: ");
+                int conta = int.Parse(Console.ReadLine());
+
+                var trans = transactions.Where(c => c.AccountId == conta).ToList();
+
+                if (trans.Count == 0)
+                {
+                    Console.WriteLine("Nenhuma transação encontrada");
+                }
+                else
+                {
+                    foreach (var t in trans)
+                    {
+                        Console.WriteLine(t);
+                    }
+                }
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine("Erro, Formato digitado não valido, numero da conta deve ser numero inteiro!");
+            }
+            catch (InvalidCastException ex)
+            {
+                Console.WriteLine("Erro, Formato digitado não valido, numero da conta deve ser numero inteiro!");
+                Console.WriteLine("Erro: " + ex);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex);
+            }
         }
 
         private static void Transfer()
@@ -60,6 +100,8 @@ namespace BankTransferApp
                 double valorTransferencia = double.Parse(Console.ReadLine());
 
                 accounts[indiceContaOrigem].Transfer(valorTransferencia, accounts[indiceContaDestino]);
+                Transaction transaction = new Transaction(type: (TransactionType)3, value: valorTransferencia, accountId: indiceContaOrigem);
+                transactions.Add(transaction);
             }
             catch(ArgumentOutOfRangeException ex)
             {
@@ -91,6 +133,8 @@ namespace BankTransferApp
                 double valorDeposito = double.Parse(Console.ReadLine());
 
                 accounts[indiceConta].Deposit(valorDeposito);
+                Transaction transaction = new Transaction(type: (TransactionType)1, value: valorDeposito, accountId: indiceConta);
+                transactions.Add(transaction);
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -122,6 +166,8 @@ namespace BankTransferApp
                 double valorSaque = double.Parse(Console.ReadLine());
 
                 accounts[indiceConta].Withdraw(valorSaque);
+                Transaction transaction = new Transaction(type: (TransactionType)2, value: valorSaque, accountId: indiceConta);
+                transactions.Add(transaction);
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -218,6 +264,7 @@ namespace BankTransferApp
             Console.WriteLine("3- Transferir");
             Console.WriteLine("4- Sacar");
             Console.WriteLine("5- Depositar");
+            Console.WriteLine("E- Extrato");
             Console.WriteLine("C- Limpar Tela");
             Console.WriteLine("X- Sair");
             Console.WriteLine();
