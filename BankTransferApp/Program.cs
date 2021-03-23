@@ -5,141 +5,226 @@ namespace BankTransferApp
 {
     class Program
     {
-		static List<Account> accounts = new List<Account>();
+        static List<Account> accounts = new List<Account>();
         static void Main(string[] args)
         {
-			string opcaoUsuario = GetUserOption();
+            string opcaoUsuario = GetUserOption();
 
-			while (opcaoUsuario.ToUpper() != "X")
-			{
-				switch (opcaoUsuario)
-				{
-					case "1":
-						ListAccounts();
-						break;
-					case "2":
-						InsertAccount();
-						break;
-					case "3":
-						Transfer();
-						break;
-					case "4":
-						WithDraw();
-						break;
-					case "5":
-						Deposit();
-						break;
-					case "C":
-						Console.Clear();
-						break;
+            while (opcaoUsuario.ToUpper() != "X")
+            {
+                switch (opcaoUsuario)
+                {
+                    case "1":
+                        ListAccounts();
+                        break;
+                    case "2":
+                        InsertAccount();
+                        break;
+                    case "3":
+                        Transfer();
+                        break;
+                    case "4":
+                        WithDraw();
+                        break;
+                    case "5":
+                        Deposit();
+                        break;
+                    case "C":
+                        Console.Clear();
+                        break;
 
-					default:
-						throw new ArgumentOutOfRangeException();
-				}
+                    default:
+                        Console.WriteLine("A opção digitada não existe! insira as opções listadas!");
+                        break;
+                }
 
-				opcaoUsuario = GetUserOption();
-			}
+                opcaoUsuario = GetUserOption();
+            }
 
-			Console.WriteLine("Obrigado por utilizar nossos serviços.");
-			Console.ReadLine();
+            Console.WriteLine("Obrigado por utilizar nossos serviços.");
+            Console.ReadLine();
 
-		}
+        }
 
         private static void Transfer()
         {
-			Console.Write("Digite o número da conta de origem: ");
-			int indiceContaOrigem = int.Parse(Console.ReadLine());
+            try
+            {
+                Console.Write("Digite o número da conta de origem: ");
+                int indiceContaOrigem = int.Parse(Console.ReadLine());
 
-			Console.Write("Digite o número da conta de destino: ");
-			int indiceContaDestino = int.Parse(Console.ReadLine());
+                Console.Write("Digite o número da conta de destino: ");
+                int indiceContaDestino = int.Parse(Console.ReadLine());
 
-			Console.Write("Digite o valor a ser transferido: ");
-			double valorTransferencia = double.Parse(Console.ReadLine());
+                Console.Write("Digite o valor a ser transferido: ");
+                double valorTransferencia = double.Parse(Console.ReadLine());
 
-			accounts[indiceContaOrigem].Transfer(valorTransferencia, accounts[indiceContaDestino]);
-		}
+                accounts[indiceContaOrigem].Transfer(valorTransferencia, accounts[indiceContaDestino]);
+            }
+            catch(ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine("Conta digitada não existe!");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine("Erro, Formato digitado não valido, numero da conta deve ser numero inteiro e valor numero decimal!");
+            }
+            catch (InvalidCastException ex)
+            {
+                Console.WriteLine("Erro, confira os numeros das contas e o valor inserido e tente novamente!");
+                Console.WriteLine("Erro: " + ex);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex);
+            }
+        }
 
         private static void Deposit()
         {
-			Console.Write("Digite o número da conta: ");
-			int indiceConta = int.Parse(Console.ReadLine());
+            try
+            {
+                Console.Write("Digite o número da conta: ");
+                int indiceConta = int.Parse(Console.ReadLine());
 
-			Console.Write("Digite o valor a ser depositado: ");
-			double valorDeposito = double.Parse(Console.ReadLine());
+                Console.Write("Digite o valor a ser depositado: ");
+                double valorDeposito = double.Parse(Console.ReadLine());
 
-			accounts[indiceConta].Deposit(valorDeposito);
-		}
+                accounts[indiceConta].Deposit(valorDeposito);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine("Conta digitada não existe!");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine("Erro, Formato digitado não valido, numero da conta deve ser numero inteiro e valor numero decimal!");
+            }
+            catch (InvalidCastException ex)
+            {
+                Console.WriteLine("Erro, confira o numero da conta e o valor inserido e tente novamente!");
+                Console.WriteLine("Erro: " + ex);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex);
+            }
+        }
 
         private static void WithDraw()
         {
-			Console.Write("Digite o número da conta: ");
-			int indiceConta = int.Parse(Console.ReadLine());
+            try
+            {
+                Console.Write("Digite o número da conta: ");
+                int indiceConta = int.Parse(Console.ReadLine());
 
-			Console.Write("Digite o valor a ser sacado: ");
-			double valorSaque = double.Parse(Console.ReadLine());
+                Console.Write("Digite o valor a ser sacado: ");
+                double valorSaque = double.Parse(Console.ReadLine());
 
-			accounts[indiceConta].Withdraw(valorSaque);
-		}
+                accounts[indiceConta].Withdraw(valorSaque);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine("Conta digitada não existe!");
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine("Erro, Formato digitado não valido, numero da conta deve ser numero inteiro e valor numero decimal!");
+            }
+            catch (InvalidCastException ex)
+            {
+                Console.WriteLine("Erro, confira os numero da conta e o valor inserido e tente novamente!");
+                Console.WriteLine("Erro: " + ex);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex);
+            }
+        }
 
         private static void ListAccounts()
         {
-			Console.WriteLine("Listar contas");
+            Console.WriteLine("Listar contas");
 
-			if (accounts.Count == 0)
-			{
-				Console.WriteLine("Nenhuma conta cadastrada.");
-				return;
-			}
+            if (accounts.Count == 0)
+            {
+                Console.WriteLine("Nenhuma conta cadastrada.");
+                return;
+            }
 
-			for (int i = 0; i < accounts.Count; i++)
-			{
-				Account conta = accounts[i];
-				Console.Write("#{0} - ", i);
-				Console.WriteLine(conta);
-			}
-		}
+            for (int i = 0; i < accounts.Count; i++)
+            {
+                Account conta = accounts[i];
+                Console.Write("#{0} - ", i);
+                Console.WriteLine(conta);
+            }
+        }
 
         private static void InsertAccount()
         {
-			Console.WriteLine("Inserir nova conta");
+            try
+            {
+                Console.WriteLine("Inserir nova conta");
 
-			Console.Write("Digite 1 para Conta Fisica ou 2 para Juridica: ");
-			int entradaTipoConta = int.Parse(Console.ReadLine());
+                Console.Write("Digite 1 para Conta Fisica ou 2 para Juridica: ");
+                int entradaTipoConta = int.Parse(Console.ReadLine());
 
-			Console.Write("Digite o Nome do Cliente: ");
-			string entradaNome = Console.ReadLine();
+                if(entradaTipoConta != 1 && entradaTipoConta != 2)
+                {
+                    Console.WriteLine("Tipo de conta não existe! Digite 1 para Conta Fisica ou 2 para Juridica!");
 
-			Console.Write("Digite o saldo inicial: ");
-			double entradaSaldo = double.Parse(Console.ReadLine());
+                    return;
+                }
 
-			Console.Write("Digite o crédito: ");
-			double entradaCredito = double.Parse(Console.ReadLine());
+                Console.Write("Digite o Nome do Cliente: ");
+                string entradaNome = Console.ReadLine();
 
-			Account newAccount = new Account(accountType: (AccountType)entradaTipoConta,
-										balance: entradaSaldo,
-										credit: entradaCredito,
-										name: entradaNome);
+                Console.Write("Digite o saldo inicial: ");
+                double entradaSaldo = double.Parse(Console.ReadLine());
 
-			accounts.Add(newAccount);
-		}
+                Console.Write("Digite o crédito: ");
+                double entradaCredito = double.Parse(Console.ReadLine());
 
-        private static string GetUserOption(){
+                Account newAccount = new Account(accountType: (AccountType)entradaTipoConta,
+                                            balance: entradaSaldo,
+                                            credit: entradaCredito,
+                                            name: entradaNome);
+
+                accounts.Add(newAccount);
+            }
+            catch (FormatException ex)
+            {
+                Console.WriteLine("Erro, Formato digitado não valido, Tipo de conta deve ser numero inteiro e valores de saldo e crédito decimal!");
+            }
+            catch (InvalidCastException ex)
+            {
+                Console.WriteLine("Erro, Confira os dados digitados e tente novamente!");
+                Console.WriteLine("Erro: " + ex);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro: " + ex);
+            }
+        }
+
+        private static string GetUserOption()
+        {
             Console.WriteLine();
-			Console.WriteLine("DI Bank a seu dispor!!!");
-			Console.WriteLine("Informe a opção desejada:");
+            Console.WriteLine("DI Bank a seu dispor!!!");
+            Console.WriteLine("Informe a opção desejada:");
 
-			Console.WriteLine("1- Listar contas");
-			Console.WriteLine("2- Inserir nova conta");
-			Console.WriteLine("3- Transferir");
-			Console.WriteLine("4- Sacar");
-			Console.WriteLine("5- Depositar");
+            Console.WriteLine("1- Listar contas");
+            Console.WriteLine("2- Inserir nova conta");
+            Console.WriteLine("3- Transferir");
+            Console.WriteLine("4- Sacar");
+            Console.WriteLine("5- Depositar");
             Console.WriteLine("C- Limpar Tela");
-			Console.WriteLine("X- Sair");
-			Console.WriteLine();
+            Console.WriteLine("X- Sair");
+            Console.WriteLine();
 
-			string opcaoUsuario = Console.ReadLine().ToUpper();
-			Console.WriteLine();
-			return opcaoUsuario;
+            string opcaoUsuario = Console.ReadLine().ToUpper();
+            Console.WriteLine();
+            return opcaoUsuario;
         }
     }
 }
